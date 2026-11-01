@@ -1,2 +1,3 @@
 User-agent: *
-Disallow: /
+Allow: /
+Sitemap: https://website-1.arrange-print.workers.dev/sitemap.xml
