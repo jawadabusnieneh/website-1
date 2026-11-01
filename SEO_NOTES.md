@@ -19,7 +19,7 @@ These phrases are used naturally in relevant page titles, headings, descriptions
 
 Each page has its own title and description. Build output includes canonical URLs, Open Graph and Twitter summary metadata. Indexable pages include WebSite and WebPage JSON-LD; the three tools also describe a free WebApplication. No fabricated reviews, ratings, author identities or search actions are included. Structured data does not guarantee rich results.
 
-The real configured origin is https://website-1.arrange-print.workers.dev. The sitemap includes the 13 normal pages; 404 is noindex and excluded. robots.txt points to the sitemap. Contact email is rendered into built HTML so it does not require JavaScript to be read.
+The real configured origin is https://arrange-print.pages.dev. The sitemap includes the 13 normal pages; 404 is noindex and excluded. robots.txt points to the sitemap. Contact email is rendered into built HTML so it does not require JavaScript to be read.
 
 ## After deployment
 
