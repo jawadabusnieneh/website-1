@@ -24,12 +24,21 @@ for(const f of fs.readdirSync('dist').filter(x=>x.endsWith('.html'))){
    if(['arrange.html','size.html','poster.html'].includes(f))assert(graph['@graph'].some(x=>x['@type']==='WebApplication'&&x.isAccessibleForFree===true));
  }else assert((await page.locator('meta[name="robots"]').getAttribute('content')).includes('noindex'));
  ok(true,'canonical, social metadata and structured data '+f);
+ if(siteConfig.adsensePublisherId){
+   const tag=page.locator('meta[name="google-adsense-account"]');
+   if(f==='ruler.html')assert.equal(await tag.count(),0);
+   else{assert.equal(await tag.count(),1);assert.equal(await tag.getAttribute('content'),siteConfig.adsensePublisherId)}
+   if(!siteConfig.adsEnabled)assert.equal(await page.locator('script[src*="pagead2.googlesyndication.com"]').count(),0);
+   ok(true,'publisher verification without advertising on '+f);
+ }
+
  const links=await page.locator('a[href]').evaluateAll(as=>as.map(a=>a.getAttribute('href')).filter(x=>!x.startsWith('http')&&!x.startsWith('#')&&!x.startsWith('mailto:')));
  for(const href of links)assert.ok(fs.existsSync(path.join('dist',href)),`${f} -> ${href}`);
  if(f==='contact.html')ok(await page.getByRole('link',{name:siteConfig.email,exact:true}).getAttribute('href')==='mailto:'+siteConfig.email,'configured email is accessible in contact page');
  if(f==='index.html')await page.screenshot({path:'test-results/desktop-home.png',fullPage:true});
 }
 checks++;console.log('PASS all local links');
+if(siteConfig.adsensePublisherId)ok(fs.readFileSync('dist/ads.txt','utf8')===`google.com, ${siteConfig.adsensePublisherId.replace('ca-','')}, DIRECT, f08c47fec0942fa0\n`,'ads.txt contains the real publisher record');
 ok(titles.size===14&&descriptions.size===14,'all page titles and descriptions are unique');
 const sitemap=fs.readFileSync('dist/sitemap.xml','utf8');
 ok((sitemap.match(/<loc>/g)||[]).length===13&&sitemap.includes(siteConfig.siteUrl+'/')&&fs.readFileSync('dist/robots.txt','utf8').includes(siteConfig.siteUrl+'/sitemap.xml'),'sitemap and robots reference the configured live domain');

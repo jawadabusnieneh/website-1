@@ -65,6 +65,9 @@ for (const file of htmlFiles) {
     head += `<script type="application/ld+json">${json({'@context': 'https://schema.org', '@graph': graph})}</script>`;
   }
   if (!config.siteUrl || file === '404.html') head += '<meta name="robots" content="noindex,follow">';
+  if (config.adsensePublisherId && file !== 'ruler.html') {
+    head += `<meta name="google-adsense-account" content="${config.adsensePublisherId}">`;
+  }
   if (config.adsEnabled && file !== 'ruler.html') {
     head += `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsensePublisherId}" crossorigin="anonymous"></script>`;
   }
@@ -83,7 +86,7 @@ if (config.siteUrl) {
   fs.writeFileSync('dist/robots.txt', 'User-agent: *\nDisallow: /\n');
   console.log('No real URL: canonical and sitemap omitted, indexing disabled until configuration.');
 }
-if (config.adsEnabled) fs.writeFileSync('dist/ads.txt', `google.com, ${config.adsensePublisherId.replace('ca-', '')}, DIRECT, f08c47fec0942fa0\n`);
+if (config.adsensePublisherId) fs.writeFileSync('dist/ads.txt', `google.com, ${config.adsensePublisherId.replace('ca-', '')}, DIRECT, f08c47fec0942fa0\n`);
 const files = [];
 function walk(directory) {
   for (const entry of fs.readdirSync(directory, {withFileTypes: true})) {

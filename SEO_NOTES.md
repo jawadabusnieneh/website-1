@@ -28,4 +28,4 @@ The real configured origin is https://arrange-print.pages.dev. The sitemap inclu
 3. Add the HTTPS URL-prefix property in Google Search Console using your Google account. If you choose HTML-file verification, provide Google's actual verification file; do not invent a verification token. Submit `/sitemap.xml` after ownership is verified, and inspect the home and tool URLs.
 4. Allow time for crawling. Indexing, ranking, traffic and AdSense approval are not guaranteed. This work did not verify Search Console ownership, submit a sitemap to Google or activate advertisements.
 
-AdSense remains disabled. Follow DEPLOY_AR.md for actual publisher credentials, consent and privacy requirements before enabling it.
+AdSense advertising remains disabled. The real publisher ID supplied in the owner's AdSense screenshot is used only for the google-adsense-account verification meta tag and ads.txt; no advertising script loads while adsEnabled is false. Follow DEPLOY_AR.md for actual publisher credentials, consent and privacy requirements before enabling it.
