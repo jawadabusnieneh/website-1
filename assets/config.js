@@ -1,0 +1,1 @@
+window.SITE_CONFIG = {"siteName":"رتّب واطبع","email":"jawadhafezabusnieneh@gmail.com"};
