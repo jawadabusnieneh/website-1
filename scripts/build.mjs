@@ -1,6 +1,6 @@
 import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';
 const config=JSON.parse(fs.readFileSync('site.config.json','utf8'));
-if(config.siteUrl){const u=new URL(config.siteUrl);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||u.pathname!=='/')throw Error('siteUrl must be a real HTTPS origin without a path');config.siteUrl=u.origin}
+if(config.siteUrl){const u=new URL(config.siteUrl);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash)throw Error('siteUrl must be a real HTTPS URL without query or fragment');config.siteUrl=u.origin+u.pathname.replace(/\/$/,'')}
 if(config.adsensePublisherId&&!/^ca-pub-\d{16}$/.test(config.adsensePublisherId))throw Error('Invalid AdSense publisher ID');
 if(config.adsEnabled&&(!config.adsensePublisherId||!config.siteUrl))throw Error('Real site URL and publisher ID required');
 fs.rmSync('dist',{recursive:true,force:true});fs.cpSync('src','dist',{recursive:true});fs.mkdirSync('dist/assets/vendor',{recursive:true});fs.copyFileSync('node_modules/pdf-lib/dist/pdf-lib.min.js','dist/assets/vendor/pdf-lib.min.js');fs.copyFileSync('node_modules/pdf-lib/LICENSE.md','dist/assets/vendor/pdf-lib-LICENSE.txt');
