@@ -55,6 +55,7 @@ for (const file of htmlFiles) {
   const baseFile = file.split('/').pop();
   const siteName = isArabic ? config.siteNameAr : config.siteName;
   const features = isArabic ? toolFeaturesAr[baseFile] : toolFeatures[baseFile];
+  const adsAllowed = config.adsEnabled && !['arrange.html', 'size.html', 'poster.html', 'ruler.html', '404.html'].includes(baseFile);
   let html = fs.readFileSync('dist/' + file, 'utf8').replaceAll('Arrange &amp; Print', escape(config.siteName)).replaceAll('رتّب واطبع', escape(config.siteNameAr));
   const title = html.match(/<title>(.*?)<\/title>/s)[1];
   const description = html.match(/<meta name="description" content="([^"]*)">/)[1];
@@ -83,14 +84,17 @@ for (const file of htmlFiles) {
   if (config.adsensePublisherId && baseFile !== 'ruler.html') {
     head += `<meta name="google-adsense-account" content="${config.adsensePublisherId}">`;
   }
-  if (config.adsEnabled && baseFile !== 'ruler.html') {
+  if (adsAllowed) {
     head += `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsensePublisherId}" crossorigin="anonymous"></script>`;
   }
   html = html.replace('<!-- SITE_HEAD -->', head);
   if (baseFile === 'contact.html' && config.email) {
     html = html.replace(/(<p id="contact-address"[^>]*>)[\s\S]*?<\/p>/, `$1<a href="mailto:${escape(config.email)}">${escape(config.email)}</a></p>`);
   }
-  if (config.adsEnabled) html = html.replace('Reserved ad space · Advertising is currently disabled', 'Reserved ad space').replace('مساحة إعلانية محجوزة · الإعلانات معطّلة حاليًا', 'مساحة إعلانية محجوزة');
+  if (config.adsEnabled) {
+    if (adsAllowed) html = html.replace('Reserved ad space · Advertising is currently disabled', 'Advertisement').replace('مساحة إعلانية محجوزة · الإعلانات معطّلة حاليًا', 'إعلان').replace('مساحة إعلانية مستقبلية', 'مساحة إعلانية');
+    else html = html.replace(/<aside class="ad-space no-print"[\s\S]*?<\/aside>/, '');
+  }
   fs.writeFileSync('dist/' + file, html);
 }
 if (config.siteUrl) {

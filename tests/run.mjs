@@ -2,10 +2,10 @@ import {chromium} from '@playwright/test';import {PDFDocument,PDFName,PDFRawStre
 fs.mkdirSync('test-results',{recursive:true});let checks=0;const ok=(condition,msg)=>{assert.ok(condition,msg);checks++;console.log('PASS '+msg)};
 const server=http.createServer((req,res)=>{const target=path.resolve('dist','.'+decodeURIComponent(req.url.split('?')[0].endsWith('/')?req.url.split('?')[0]+'index.html':req.url.split('?')[0]));if(!target.startsWith(path.resolve('dist')+path.sep)){res.writeHead(403).end();return}try{res.setHeader('Content-Type',target.endsWith('.js')?'text/javascript':target.endsWith('.css')?'text/css':target.endsWith('.html')?'text/html':'application/octet-stream');res.end(fs.readFileSync(target))}catch{res.writeHead(404).end()}});await new Promise(r=>server.listen(8091,'127.0.0.1',r));let browser;
 try{
-browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']});const page=await browser.newPage({acceptDownloads:true});page.setDefaultTimeout(15000);page.setDefaultNavigationTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(e.message));let remote=0;page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:8091')&&!r.url().startsWith('data:')&&!r.url().startsWith('blob:'))remote++});
+browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']});const siteConfig=JSON.parse(fs.readFileSync('site.config.json','utf8'));const adScriptUrl=`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsensePublisherId}`;let adScriptRequests=0;const page=await browser.newPage({acceptDownloads:true});await page.route('https://**/*',async route=>{if(route.request().url()===adScriptUrl){adScriptRequests++;await route.fulfill({status:200,contentType:'application/javascript',body:'/* AdSense delivery is stubbed during local tests; real ad serving is not tested. */'})}else await route.abort()});page.setDefaultTimeout(15000);page.setDefaultNavigationTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(e.message));let remote=0;page.on('request',r=>{if(!r.url().startsWith('http://127.0.0.1:8091')&&!r.url().startsWith('data:')&&!r.url().startsWith('blob:')&&r.url()!==adScriptUrl)remote++});
 await page.goto('http://127.0.0.1:8091');const fixtures=await page.evaluate(()=>{const make=(w,h,color,format='image/png')=>{let c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle=color;x.fillRect(0,0,w,h);x.clearRect(0,0,10,10);return c.toDataURL(format).split(',')[1]};return {red:make(600,400,'#f00'),blue:make(400,600,'#00f'),webp:make(400,400,'#0f0','image/webp'),jpg:make(300,200,'#f0f','image/jpeg')}});
 const file=(name,key='red',mimeType='image/png')=>({name,mimeType,buffer:Buffer.from(fixtures[key],'base64')});
-const siteConfig=JSON.parse(fs.readFileSync('site.config.json','utf8'));
+
 const titles=new Set(),descriptions=new Set();
 for(const f of ['','en/'].flatMap(prefix=>fs.readdirSync('dist/'+prefix).filter(x=>x.endsWith('.html')).map(x=>prefix+x))){
  const baseFile=f.split('/').pop(),lang=f.startsWith('en/')?'en':'ar';
@@ -29,8 +29,16 @@ for(const f of ['','en/'].flatMap(prefix=>fs.readdirSync('dist/'+prefix).filter(
    const tag=page.locator('meta[name="google-adsense-account"]');
    if(baseFile==='ruler.html')assert.equal(await tag.count(),0);
    else{assert.equal(await tag.count(),1);assert.equal(await tag.getAttribute('content'),siteConfig.adsensePublisherId)}
-   if(!siteConfig.adsEnabled)assert.equal(await page.locator('script[src*="pagead2.googlesyndication.com"]').count(),0);
-   ok(true,'publisher verification without advertising on '+f);
+   const adsAllowed=siteConfig.adsEnabled&&!['arrange.html','size.html','poster.html','ruler.html','404.html'].includes(baseFile);
+   const scripts=page.locator('script[src*="pagead2.googlesyndication.com"]');
+   assert.equal(await scripts.count(),adsAllowed?1:0);
+   if(adsAllowed){
+     assert.equal(await scripts.getAttribute('src'),adScriptUrl);
+     assert.equal(await scripts.getAttribute('crossorigin'),'anonymous');
+     assert.equal(await scripts.evaluate(e=>e.parentElement.tagName),'HEAD');
+     assert(await scripts.evaluate(e=>e.async));
+   }
+   ok(true,'publisher verification and ad script policy on '+f);
  }
 
  const links=await page.locator('a[href]').evaluateAll(as=>as.map(a=>a.getAttribute('href')).filter(x=>!x.startsWith('http')&&!x.startsWith('#')&&!x.startsWith('mailto:')));
@@ -102,6 +110,6 @@ ok(await page.locator('html').getAttribute('lang')==='en','switch to English kee
 await page.locator('.language-switch').click();await page.waitForURL('**/poster.html');
 ok(await page.locator('html').getAttribute('lang')==='ar','switch back restores Arabic RTL');
 await page.goto('http://127.0.0.1:8091/en/');ok(await page.locator('html').getAttribute('lang')==='en','English directory homepage loads');
-ok(errors.length===0,'no browser JavaScript errors: '+errors.join(';'));ok(remote===0,'no external requests during tools');
+ok(errors.length===0,'no browser JavaScript errors: '+errors.join(';'));ok(remote===0,'no unexpected external requests (official AdSense library stubbed locally)');if(siteConfig.adsEnabled)ok(adScriptRequests>0,'content pages request the official AdSense script with the real publisher ID');
 fs.writeFileSync('test-results/results.json',JSON.stringify({checks,passed:true},null,2));console.log(`ALL ${checks} CHECKS PASSED`);
 }finally{await browser?.close();server.close()}
