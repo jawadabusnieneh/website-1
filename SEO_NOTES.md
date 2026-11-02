@@ -1,6 +1,6 @@
-# English search content and indexing
+# Arabic and English search content and indexing
 
-The public site is now English (`lang="en"`, `dir="ltr"`) under the brand Arrange & Print. The Arabic owner documentation remains outside the deployment package.
+Arabic is the default at the site root (`lang="ar"`, `dir="rtl"`), under the name رتّب واطبع. English is available at `/en/` (`lang="en"`, `dir="ltr"`) as Arrange & Print. Each page links to its matching translation. Owner documentation remains outside the deployment package.
 
 ## Search intent covered by each page
 
@@ -19,7 +19,7 @@ These phrases are used naturally in relevant page titles, headings, descriptions
 
 Each page has its own title and description. Build output includes canonical URLs, Open Graph and Twitter summary metadata. Indexable pages include WebSite and WebPage JSON-LD; the three tools also describe a free WebApplication. No fabricated reviews, ratings, author identities or search actions are included. Structured data does not guarantee rich results.
 
-The real configured origin is https://arrange-print.pages.dev. The sitemap includes the 13 normal pages; 404 is noindex and excluded. robots.txt points to the sitemap. Contact email is rendered into built HTML so it does not require JavaScript to be read.
+The real configured origin is https://arrange-print.pages.dev. The sitemap includes 26 normal pages across both languages; both 404 pages are noindex and excluded. Each indexable page has its own canonical and reciprocal ar/en hreflang links, with Arabic as x-default. The sitemap also includes alternate-language links. robots.txt points to the sitemap. Contact email is rendered into built HTML so it does not require JavaScript to be read.
 
 ## After deployment
 
@@ -29,3 +29,5 @@ The real configured origin is https://arrange-print.pages.dev. The sitemap inclu
 4. Allow time for crawling. Indexing, ranking, traffic and AdSense approval are not guaranteed. This work did not verify Search Console ownership, submit a sitemap to Google or activate advertisements.
 
 AdSense advertising remains disabled. The real publisher ID supplied in the owner's AdSense screenshot is used only for the google-adsense-account verification meta tag and ads.txt; no advertising script loads while adsEnabled is false. Follow DEPLOY_AR.md for actual publisher credentials, consent and privacy requirements before enabling it.
+
+Arabic search topics include ترتيب الصور للطباعة، طباعة عدة صور على ورقة A4، طباعة صورة بمقاس محدد بالسنتيمتر، تقسيم صورة إلى بوستر، واختبار مسطرة 10 سم. They appear in relevant Arabic titles and explanations rather than hidden keyword lists. English topics in the table above belong to the English versions.

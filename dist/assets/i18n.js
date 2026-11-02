@@ -1,0 +1,47 @@
+export const language = typeof document !== 'undefined' && document.documentElement.lang === 'ar' ? 'ar' : 'en';
+const arabic = {
+  'Check the “{field}” field.': 'راجع حقل «{field}».',
+  '↑ Move up': '↑ للأعلى',
+  '↓ Move down': '↓ للأسفل',
+  'Duplicate': 'تكرار',
+  'Remove': 'حذف',
+  'Copies ': 'النسخ ',
+  'Copies of {name}': 'نسخ {name}',
+  'You can add up to 30 images.': 'الحد الأقصى 30 صورة.',
+  'Unsupported image format. Choose JPG, PNG or WebP.': 'الصيغة غير مدعومة. اختر JPG أو PNG أو WebP.',
+  'The file exceeds 20 MiB. Use a smaller file.': 'الملف يتجاوز 20 MiB. استخدم ملفًا أصغر.',
+  'The image exceeds 12 megapixels. Resize it first.': 'تتجاوز الصورة 12 مليون بكسل؛ صغّرها أولًا.',
+  'Images exceed 32 megapixels in total (about 128 MB for decoded pixels alone). Remove or resize some images.': 'تجاوز مجموع الصور 32 مليون بكسل (نحو 128 MB لفك البكسلات وحدها). احذف بعض الصور أو صغّرها.',
+  'Normalized images exceed 80 MiB in total. Remove or resize some images.': 'تجاوز مجموع الصور الموحّدة 80 MiB؛ احذف بعض الصور أو صغّرها.',
+  'Could not open this image.': 'تعذّر فتح الصورة.',
+  'Add images to preview your pages here.': 'أضف صورك لتظهر الأوراق هنا.',
+  'Your files stay on your device.': 'ملفاتك تبقى على جهازك.',
+  'No pages yet': 'لا توجد صفحات',
+  'Copies must be a whole number from 1 to 30.': 'عدد النسخ عدد صحيح من 1 إلى 30.',
+  'Page {page} of {total}': 'ورقة {page} من {total}',
+  'Row / column: ': 'صف / عمود: ',
+  'mm': 'مم',
+  '{total} pages': 'عدد الصفحات: {total}',
+  'Resolution warning: some images are below 150 PPI at this print size and may look pixelated.': 'تنبيه جودة: بعض الصور أقل من 150 بكسل/بوصة بالمقاس المختار؛ قد تظهر مبكسلة.',
+  'Preview ready. Print at 100% or Actual size to keep the dimensions.': 'المعاينة جاهزة. اطبع عند 100% أو Actual size للحفاظ على المقاس الفعلي.',
+  'Could not save preferences. You can continue without saving.': 'تعذّر حفظ التفضيلات؛ يمكنك المتابعة دون حفظ.',
+  'Check your settings': 'راجع الإعدادات',
+  'Creating your PDF… You can cancel.': 'جارٍ إنشاء PDF… يمكنك الإلغاء.',
+  'PDF export failed: ': 'فشل تصدير PDF: ',
+  'PDF created and downloaded. Choose Actual size when printing.': 'تم إنشاء PDF وتنزيله. اختر Actual size عند الطباعة.',
+  'Creating PDF: {page} of {total}': 'جارٍ إنشاء PDF: {page} من {total}',
+  'Could not start PDF export. Check that all site files loaded, then try again.': 'تعذّر تشغيل مُصدّر PDF. تأكد من اكتمال ملفات الموقع ثم أعد المحاولة.',
+  'Canceled. No new file was created.': 'أُلغي العمل. لم يُنشأ ملف جديد.',
+  'Saved preferences cleared.': 'مُسحت التفضيلات المحفوظة.',
+  'Could not access local storage.': 'تعذّر الوصول إلى التخزين المحلي.',
+  'The margins leave no printable area.': 'الهوامش لا تترك مساحة للطباعة.',
+  'Reduce the number of cells, margins or gaps.': 'قلّل عدد الخانات أو الهوامش أو المسافات.',
+  'The requested size is larger than the available area. Try another orientation, a smaller frame or smaller margins.': 'المقاس المطلوب أكبر من المساحة المتاحة. اختر اتجاهًا آخر أو قلّل المقاس أو الهامش.',
+  'Overlap is too large for the printable area.': 'التداخل كبير جدًا بالنسبة لمساحة الورقة.',
+  'The limit is 30 pages. Reduce the number of copies or pages.': 'الحد الأقصى 30 صفحة. قلّل النسخ أو عدد الصفحات.',
+};
+export function t(message, values = {}) {
+  let text = language === 'ar' ? (arabic[message] ?? message) : message;
+  for (const [key, value] of Object.entries(values)) text = text.replaceAll(`{${key}}`, String(value));
+  return text;
+}
