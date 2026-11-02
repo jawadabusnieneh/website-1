@@ -1,5 +1,20 @@
 export const language = typeof document !== 'undefined' && document.documentElement.lang === 'ar' ? 'ar' : 'en';
 const arabic = {
+  'Edit image': 'تعديل الصورة',
+  'Print width (mm)': 'عرض الطباعة (مم)',
+  'Print height (mm)': 'ارتفاع الطباعة (مم)',
+  'Keep image ratio': 'الحفاظ على نسبة الصورة',
+  'Assembled poster: {w} × {h} mm': 'مقاس البوستر بعد التجميع: \u2066{w} × {h}\u2069 مم',
+  'The crop must stay inside the image.': 'يجب أن تبقى حدود القص داخل الصورة.',
+  'Choose dimensions up to 8192 pixels per side and 12 megapixels total.': 'اختر أبعادًا حتى 8192 بكسل للضلع و12 مليون بكسل إجمالًا.',
+  'Keep width and height linked to avoid stretching.': 'حافظ على ترابط العرض والارتفاع لتجنب تمديد الصورة.',
+  'Originals and edits exceed 32 megapixels. Remove an image or use smaller dimensions.': 'تتجاوز الصور الأصلية والمعدّلة 32 مليون بكسل. احذف صورة أو اختر أبعادًا أصغر.',
+  'Originals and edits exceed 80 MiB. Remove an image or use smaller dimensions.': 'تتجاوز الصور الأصلية والمعدّلة 80 MiB. احذف صورة أو اختر أبعادًا أصغر.',
+  'Enlarging does not add image detail.': 'التكبير لا يضيف تفاصيل جديدة إلى الصورة.',
+  'Could not create the edited PNG.': 'تعذّر إنشاء صورة PNG المعدّلة.',
+  'Applying changes…': 'جارٍ تطبيق التعديلات…',
+  'A photo size exceeds the printable area. Reduce it or change paper orientation.': 'أحد مقاسات الصور أكبر من المساحة المتاحة. صغّر المقاس أو غيّر اتجاه الورق.',
+
   'Check the “{field}” field.': 'راجع حقل «{field}».',
   '↑ Move up': '↑ للأعلى',
   '↓ Move down': '↓ للأسفل',

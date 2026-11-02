@@ -93,7 +93,7 @@ for (const file of htmlFiles) {
   }
   if (config.adsEnabled) {
     if (adsAllowed) html = html.replace('Reserved ad space · Advertising is currently disabled', 'Advertisement').replace('مساحة إعلانية محجوزة · الإعلانات معطّلة حاليًا', 'إعلان').replace('مساحة إعلانية مستقبلية', 'مساحة إعلانية');
-    else html = html.replace(/<aside class="ad-space no-print"[\s\S]*?<\/aside>/, '');
+    else html = html.replace(/<aside[^>]*class="ad-space no-print"[\s\S]*?<\/aside>/, '');
   }
   fs.writeFileSync('dist/' + file, html);
 }

@@ -31,3 +31,8 @@ The real configured origin is https://arrange-print.pages.dev. The sitemap inclu
 AdSense is enabled on the home page and informational pages, after the owner reported the site ready and the Google consent message published. The three image tools, both ruler pages and error pages do not load advertising scripts. Verification metadata and ads.txt retain the real publisher ID. Local tests stub the official Google script and do not verify real ad delivery, Google approval or live consent behavior. See DEPLOY_AR.md for live checks and rollback.
 
 Arabic search topics include ترتيب الصور للطباعة، طباعة عدة صور على ورقة A4، طباعة صورة بمقاس محدد بالسنتيمتر، تقسيم صورة إلى بوستر، واختبار مسطرة 10 سم. They appear in relevant Arabic titles and explanations rather than hidden keyword lists. English topics in the table above belong to the English versions.
+
+
+## Image editing and clearer tool pages
+
+Tools now include a local crop/rotate/flip/pixel-resize editor with PNG download. Photo layout supports individual physical frame sizes; the exact-size tool has print presets and linked dimensions; poster output supports full-image containment. Short, accurate guides remain in HTML under expandable sections, with detailed printing guides retained separately. The static advertisement placeholder is hidden so it does not look like an empty ad; the official Auto ads script and publisher configuration on informational pages are unchanged. Existing canonical, alternate-language, sitemap and structured data are retained.
